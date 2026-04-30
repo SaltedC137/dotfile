@@ -1,0 +1,34 @@
+[options]
+separator=true
+separator_block_width=20
+markup=none
+color=#cdd6f4
+
+[cpu]
+command=sh -c 'read -r _ u n s i ow ir sir st _ < /proc/stat; t1=$((u+n+s+i+ow+ir+sir+st)); id1=$((i+ow)); sleep 0.3; read -r _ u n s i ow ir sir st _ < /proc/stat; t2=$((u+n+s+i+ow+ir+sir+st)); id2=$((i+ow)); dt=$((t2-t1)); did=$((id2-id1)); usage=0; [ "$dt" -gt 0 ] && usage=$((100*(dt-did)/dt)); color="#89b4fa"; if [ "$usage" -ge 85 ]; then color="#f38ba8"; elif [ "$usage" -ge 65 ]; then color="#f9e2af"; fi; printf "CPU %s%%\n\n%s\n" "$usage" "$color"'
+interval=5
+
+[memory]
+command=awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2} END {u=t-a; p=(u*100)/t; color="#a6e3a1"; if (p>=85) color="#f38ba8"; else if (p>=70) color="#f9e2af"; printf "MEM %.1f/%.1fG\n\n%s\n", u/1048576, t/1048576, color}' /proc/meminfo
+interval=5
+
+[memory_usage]
+command=awk '/^MemTotal:/ {t=$2} /^MemAvailable:/ {a=$2} END {u=t-a; p=(u*100)/t; color="#cba6f7"; if (p>=85) color="#f38ba8"; else if (p>=70) color="#f9e2af"; printf "MEM%% %d%%\n\n%s\n", p, color}' /proc/meminfo
+interval=5
+
+[disk]
+command=sh -c 'set -- $(df -hP / | awk '"'"'NR==2{gsub(/%/,"",$5); print $5, $4}'"'"'); p=$1; free=$2; color="#74c7ec"; if [ "$p" -ge 90 ]; then color="#f38ba8"; elif [ "$p" -ge 75 ]; then color="#f9e2af"; fi; printf "DISK %s%% (%s free)\n\n%s\n" "$p" "$free" "$color"'
+interval=30
+
+[ip]
+command=sh -c 'iface=$(ip route show default 2>/dev/null | awk '"'"'NR==1{print $5}'"'"'); if [ -z "$iface" ]; then printf "IP down\n\n#f38ba8\n"; exit 0; fi; addr=$(ip -4 -o addr show dev "$iface" scope global 2>/dev/null | awk '"'"'NR==1{split($4,a,"/"); print a[1]}'"'"'); if [ -z "$addr" ]; then printf "IP %s down\n\n#f9e2af\n" "$iface"; else printf "IP %s\n\n#94e2d5\n" "$addr"; fi'
+interval=10
+
+[battery]
+command=sh -c 'bat=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -n1); if [ -z "$bat" ]; then printf "BAT N/A\n\n#6c7086\n"; exit 0; fi; cap=$(cat "$bat/capacity" 2>/dev/null || echo 0); stat=$(cat "$bat/status" 2>/dev/null || echo Unknown); state="BAT"; [ "$stat" = "Charging" ] && state="CHG"; [ "$stat" = "Full" ] && state="FULL"; [ "$stat" = "Not charging" ] && state="AC"; color="#a6e3a1"; if [ "$state" = "BAT" ]; then if [ "$cap" -le 15 ]; then color="#f38ba8"; elif [ "$cap" -le 35 ]; then color="#f9e2af"; fi; else color="#89b4fa"; fi; printf "BAT %s%% %s\n\n%s\n" "$cap" "$state" "$color"'
+interval=30
+
+[time]
+command=date '+TIME %Y-%m-%d %a %H:%M'
+interval=30
+color=#cdd6f4
