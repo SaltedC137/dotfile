@@ -1,5 +1,5 @@
 # BEGIN_KITTY_THEME
-# Alien Blood
+# Dark Pastel
 include current-theme.conf
 # END_KITTY_THEME
 
@@ -7,7 +7,7 @@ include current-theme.conf
 
 
 # font
-font_size 19
+font_size 14
 font_family          Maple Mono NF CN ExtraLight
 bold_font            Maple Mono NF CN Bold
 italic_font          Maple Mono NF CN Italic
@@ -23,6 +23,7 @@ disable_ligatures cursor
 hide_window_decorations        titlebar-only
 window_padding_width           15
 remember_window_size           yes
+background_opacity             0.85
 
 # tab bar
 tab_bar_edge                top
