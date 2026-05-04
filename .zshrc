@@ -116,3 +116,4 @@ noproxy () {
 }
 
 export TERMINAL=kitty
+export TERM=xterm-kitty
