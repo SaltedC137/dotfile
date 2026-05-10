@@ -29,7 +29,7 @@ exec --no-startup-id dex-autostart --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -43,8 +43,8 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 # set brightness
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -69,7 +69,7 @@ bindsym $mod+d exec --no-startup-id rofi -show drun
 
 
 # i3lock
-bindsym $mod+x exec i3lock --tiling -i ~/下载/wallhaven-x1r77l_2560x1600.png
+bindsym $mod+x exec i3lock --tiling -i ~/Downloads/wallhaven-x1r77l_2560x1600.png
 
 
 # change focus
@@ -162,7 +162,9 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 #clipboard
 #exec --no-startup-id greenclip daemon
-bindsym $mod+Shift+v exec rofi -modi "clipboard:greenclip print" -show clipboard
+bindsym $mod+Shift+v exec rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+
+
 
 
 # reload the configuration file
@@ -200,13 +202,13 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # start
-
 exec --no-startup-id xset -b
 exec --no-startup-id fcitx5
 # exec_always
 
 exec_always --config ~/.config/picom/picom.conf
-exec_always --no-startup-id feh --bg-fill ~/图片/wallhaven-6k1z3x_2560x1600.png
+exec_always --no-startup-id feh --bg-fill ~/Pictures/wallhaven-6k1z3x_2560x1600.png
+exec_always --no-startup-id greenclip daemon
 
 
 # client focus colors
@@ -232,5 +234,7 @@ bar {
            focused_workspace      #2e7d32A5 #388e3cA5 #ffffffF5
            inactive_workspace     #3333333F #2222223F #888888F5
            urgent_workspace       #80808072 #FF450072 #ffffffF5
-           }
-           }
+
+}
+
+}

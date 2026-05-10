@@ -6,11 +6,12 @@ color=#cdd6f4
 
 
 [volume]
-command=sh -c 'muted=$(pactl get-sink-mute @DEFAULT_SINK@ | cut -d" " -f2); if [ "$muted" = "yes" ]; then echo "🔇 Muted"; echo ""; echo "#6c7086"; exit 0; fi; vol=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po "\d+(?=%)" | head -1); icon="🔊"; if [ "$vol" -eq 0 ]; then icon="🔇"; elif [ "$vol" -lt 30 ]; then icon="🔈"; elif [ "$vol" -lt 70 ]; then icon="🔉"; fi; color="#89b4fa"; if [ "$vol" -ge 85 ]; then color="#f38ba8"; elif [ "$vol" -ge 65 ]; then color="#f9e2af"; fi; printf "%s %s%%\n\n%s\n" "$icon" "$vol" "$color"'
+command=sh -c 'muted=$(pactl get-sink-mute @DEFAULT_SINK@ | cut -d" " -f2); if [ "$muted" = "yes" ]; then echo "Muted"; echo ""; echo "#6c7086"; exit 0; fi; vol=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po "\d+(?=%)" | head -1); color="#89b4fa"; if [ "$vol" -ge 85 ]; then color="#f38ba8"; elif [ "$vol" -ge 65 ]; then color="#f9e2af"; fi; printf "VOL %s%%\n\n%s\n" "$vol" "$color"'
 interval=1
 
+
 [brightness]
-command=sh -c 'max=$(brightnessctl max 2>/dev/null); cur=$(brightnessctl get 2>/dev/null); if [ -z "$max" ] || [ -z "$cur" ]; then echo "☀️ N/A"; echo ""; echo "#6c7086"; exit 0; fi; percent=$((cur * 100 / max)); icon="🌑"; if [ "$percent" -ge 90 ]; then icon="☀️"; elif [ "$percent" -ge 70 ]; then icon="🌞"; elif [ "$percent" -ge 40 ]; then icon="🌤️"; elif [ "$percent" -ge 10 ]; then icon="🌙"; fi; color="#89b4fa"; if [ "$percent" -ge 85 ]; then color="#f38ba8"; elif [ "$percent" -ge 65 ]; then color="#f9e2af"; fi; printf "%s %s%%\n\n%s\n" "$icon" "$percent" "$color"'
+command=sh -c 'max=$(brightnessctl max 2>/dev/null); cur=$(brightnessctl get 2>/dev/null); if [ -z "$max" ] || [ -z "$cur" ] || [ "$max" -eq 0 ]; then echo "light N/A"; echo "#6c7086"; exit 0; fi; percent=$((cur * 100 / max)); echo "LIGHT ${percent}%"; echo "#f9e2af"'
 interval=1
 
 [cpu]
